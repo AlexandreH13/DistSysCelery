@@ -26,7 +26,7 @@ class ProducerMessage(BaseModel):
     message: str
     size: int
 
-@app.post("/send_message")
+@app.post("/producer_consumer")
 def send_message(message: ProducerMessage):
     """
     Simulates sending a message to RabbitMQ.
@@ -37,19 +37,22 @@ def send_message(message: ProducerMessage):
     message_content = message.message
     size = message.size
 
-    send_message_celery(message_content, size)
+    producer_consumer_celery(message_content, size)
     return JSONResponse(
         content={"detail": f"Message with ID {id_message} sent successfully."},
         status_code=200,
 )
 
-def send_message_celery(message: str, size: int) -> None:
+def producer_consumer_celery(message: str, size: int) -> None:
+    """
+    A basic producer consumer function
+    """
     logger.info(f"Sending message: {message} with size: {size}")
     task = celery_app.send_task(
-        "send_massage",
+        "producer_consumer",
         args=[message, size],
-        queue="my_queue",
-)
+        queue="producer_consumer_queue",
+    )
     
 if __name__ == "__main__":
     import uvicorn

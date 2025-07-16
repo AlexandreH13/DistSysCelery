@@ -12,10 +12,10 @@ done
 echo "RabbitMQ está pronto. Configurando usuários e permissões..."
 
 echo "Criando vhost..."
-rabbitmqctl add_vhost $VHOST
+rabbitmqctl add_vhost dist_sys
 
 echo "Criando usuários..."
-rabbitmqctl add_user admin "$QUEUE_PASS"
+rabbitmqctl add_user admin "admin"
 rabbitmqctl set_user_tags admin administrator
 
 echo "Criando permissões..."
